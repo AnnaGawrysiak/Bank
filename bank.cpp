@@ -16,7 +16,7 @@ class Klient
  public:
 
     Klient ()
-    { // konstruktor domyœlny
+    { // konstruktor domyslny
       saldo = 1000;
     }
 
@@ -25,12 +25,12 @@ class Klient
         saldo = saldo_;
     }
 
-    void set_saldo(int &saldo_)
+    virtual void set_saldo(int &saldo_)
     {
         saldo = saldo_;
     }
 
-    get_saldo()
+    virtual int get_saldo()
     {
         return saldo;
     }
@@ -61,8 +61,8 @@ class VIP : public Klient
 
     float oprocentowanie;
 
- public:
 
+ public:
 
     VIP() : Klient()
     { // konstruktor domyœlny
@@ -70,17 +70,24 @@ class VIP : public Klient
       oprocentowanie = 0.08;
     };
 
+    VIP(int saldo_) : Klient(saldo_)
+    { // konstruktor domyslny
+      saldo = saldo_;
+      oprocentowanie = 0.08;
+    };
+
     virtual ~VIP(){};
+
+    int get_saldo() override
+    {
+        return saldo;
+    }
 
      virtual void set_saldo(int& saldo_)
      {
          saldo = saldo_;
      }
 
-     virtual float get_saldo()
-     {
-         return saldo; // BUZIACZEK :)
-     }
 
     virtual float nalicz_oprocentowanie(float debet)
     {
@@ -109,21 +116,27 @@ class Extra_VIP : public  VIP
 public:
 
     Extra_VIP() : VIP()
-    { // konstruktor domyœlny
+    { // konstruktor domyslny
       saldo = 100000;
       oprocentowanie = 0.06;
     };
 
+    Extra_VIP(int saldo_, float oprocentowanie_) : VIP(saldo_)
+    { // konstruktor domyslny
+      saldo = saldo_;
+      oprocentowanie = oprocentowanie_;
+    };
+
     virtual ~Extra_VIP(){};
+
+    int get_saldo() override
+    {
+        return saldo;
+    }
 
     void set_saldo(int& saldo_)
     {
         saldo = saldo_;
-    }
-
-    float get_saldo()
-    {
-        return saldo;
     }
 
     float nalicz_oprocentowanie(float debet)
@@ -131,21 +144,13 @@ public:
         return debet * oprocentowanie;
     }; // ewentualne zrob getter
 
-    int wyplac(int wyplata) override
-    {
-        if (wyplata > (saldo + 2000))
-            return saldo + 2000;
-
-        else
-            return wyplata;
-    }
 
 };
 
 
 int main()
 {
-Klient nowy_klient;
+/*Klient nowy_klient;
 
 Klient* wsk_nowy_klient = &nowy_klient;
 
@@ -166,6 +171,22 @@ zestaw_klientow[1] = wsk_bogaty;
 zestaw_klientow[2] = wsk_obrzydliwie_bogaty;
 
 int wyplata = 1100;
+
+for (int i = 0; i < 3; i++)
+    {
+       cout << zestaw_klientow[i]->wyplac(wyplata) << endl;
+    }
+*/
+
+Klient* zestaw_klientow [3];
+
+zestaw_klientow[0] = new Klient(1000);
+
+zestaw_klientow[1] = new VIP(2000);
+
+zestaw_klientow[2] = new Extra_VIP(90, 0.09);
+
+int wyplata = 5000;
 
 for (int i = 0; i < 3; i++)
     {
